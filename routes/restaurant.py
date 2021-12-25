@@ -23,14 +23,15 @@ async def get_restaurant_data(location: str):
 
 @restaurant.get("/{location,type}")
 async def get_restaurant_data(location: str, type:str):
-    return conn.execute(restaurants.select().where(restaurants.c.location == location and restaurants.c.type==type)).fetchall()
+    return conn.execute(restaurants.select().where(restaurants.c.location == location and restaurants.c.type == type)).fetchall()
 
 
 @restaurant.post("/")
 async def add_data(restaurant : Restaurant):
-    conn.execute(restaurants.insert().values(name=restaurants.name,
-                                             type=restaurants.type,
-                                             location=restaurants.location
+    conn.execute(restaurants.insert().values(
+        name=restaurant.name,
+        type=restaurant.type,
+        location=restaurant.location
                                              ))
     return conn.execute(restaurants.select()).fetchall()
 
@@ -38,10 +39,11 @@ async def add_data(restaurant : Restaurant):
 
 @restaurant.put("/{id}")
 async def update_data(id:int,restaurant:Restaurant):
-    conn.execute(restaurants.insert().values(name=restaurants.name,
-                                             type=restaurants.type,
-                                             location=restaurants.location
-                                             ).where(id==restaurants.id,
+    conn.execute(restaurants.update().values(
+        name=restaurant.name,
+        type=restaurant.type,
+        location=restaurant.location
+                                             ).where(restaurants.c.id==id,
                                                      ))
     return conn.execute(restaurants.select()).fetchall()
 
